@@ -1,6 +1,11 @@
 package edu.suresh.passwordstrengthchecker;
 
 import android.os.Bundle;
+import android.text.TextUtils;
+import android.view.View;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.TextView;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
@@ -30,7 +35,9 @@ public class MainActivity extends AppCompatActivity {
      *       - To check if a word contains a special character: words.matches(".*[!@#$%^&*()\\-+={}\\[\\]|;:'\",.<>/?].*");
      */
 
-
+EditText userInput;
+Button btn;
+TextView resultView;
 
 
 
@@ -39,6 +46,40 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_main);
+        userInput = findViewById(R.id.editTextPassword);
+        btn = findViewById(R.id.buttonCheckStrength);
+        resultView = findViewById(R.id.textViewResult);
 
+        btn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                //TODO
+
+                String password = userInput.getText().toString();
+                if (TextUtils.isEmpty(password)){
+                    userInput.setError("empty user input");
+                }
+                if (password.length()>6 && password.matches(".*[A-Z].*")
+                    && password.matches(".*[a-z].*")
+                    && password.matches(".*[0-9].*")
+                    && password.matches(".*[!@#$%^&*()\\-+={}\\[\\]|;:'\",.<>/?].*")
+                )
+                {
+                    resultView.setText("Strong Password");
+                    resultView.setTextColor(getResources().getColor(R.color.green));
+                }
+                else if (password.length()<6 && password.matches(".*[A-Z].*")
+                    && password.matches(".*[a-z].*")
+                        && password.matches(".*[0-9].*")
+                        ){
+                    resultView.setText("Medium Password");
+                    resultView.setTextColor(getResources().getColor(R.color.yellow));
+                }
+                else {
+                    resultView.setText("Weak Password");
+                    resultView.setTextColor(getResources().getColor(R.color.red));
+                }
+            }
+        });
     }
 }
